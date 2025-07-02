@@ -1,4 +1,4 @@
-.navbar{
+.nav{
     display: flex;
     justify-content: space-around;
     padding: 16px;
@@ -134,7 +134,7 @@
         transition: 0.5s;
     }
     .nav-menu{
-        display: flex;
+        display: none;
         height: 80px;
         width: 100%;
         position: absolute;
