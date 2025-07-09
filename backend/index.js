@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const { error } = require("console");
 
 app.use(express.json());
 app.use(cors());
@@ -14,10 +13,20 @@ app.use(cors());
 // Database connection with mongoDB
 mongoose.connect("mongodb+srv://mvsiyad9:munez%40123@cluster0.9jttghw.mongodb.net/e-commerce");
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = ['http://localhost:3000', "http://localhost:5173/"];
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
 
 // API Creation
 
-app.get("/",(req,res)=>{
+app.get("/",cors(corsOptions),(req,res)=>{
     res.send("Express App is Running ")
 })
 
@@ -37,7 +46,7 @@ const upload=multer({storage:storage})
 
 app.use('/images',express.static('upload/images'))
 
-app.post("/upload",upload.single('product'),(req,res)=>{
+app.post("/upload",cors(corsOptions),upload.single('product'),(req,res)=>{
     res.json({
         success:1,
         image_url:`http://localhost:${port}/images/${req.file.filename}`
@@ -82,7 +91,7 @@ const Product = mongoose.model("Product",{
     },
 })
 
-app.post('/addproduct',async (req,res)=>{
+app.post('/addproduct',cors(corsOptions),async (req,res)=>{
     let products=await Product.find({});
     let id;
         if(products.length>0)
@@ -113,7 +122,7 @@ app.post('/addproduct',async (req,res)=>{
 
 // Creating API for deleting Products
 
-app.post('/removeproduct',async(req,res)=>{
+app.post('/removeproduct',cors(corsOptions),async(req,res)=>{
     await Product.findOneAndDelete({id:req.body.id});
     console.log('Removed');
     res.json({
@@ -155,7 +164,7 @@ const Users = mongoose.model('Users',{
 
 //Creating Endpoint For Registering User
 
-app.post('/signup',async (req,res)=>{
+app.post('/signup',cors(corsOptions),async (req,res)=>{
     let check = await Users.findOne({email:req.body.email});
     if (check) {
         return res.status(400).json({success:false,errors:"existing user found with same email address"})
@@ -185,7 +194,7 @@ app.post('/signup',async (req,res)=>{
 
 // creating endpoint for user login
 
-app.post('/login',async (req,res)=>{
+app.post('/login',cors(corsOptions),async (req,res)=>{
     var user = await Users.findOne({email:req.body.email})
     if (user){
         const passCompare = req.body.password === user.password;
