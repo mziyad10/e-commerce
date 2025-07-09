@@ -222,9 +222,20 @@ app.get('/newcollections',async(req,res)=>{
     let products = await Product.find({});
     let newcollection = products.slice(1).slice(-8);
     console.log("NewCollection Fetched");
-    res.send(newcollection);
+    res.send(newcollection); 
+})
+
+// Creating endpoints for popular in women category
+
+app.get('/popularinwomen',async(req,res)=>{
+    let products = await Product.find({category:"women"});
+    let popular_in_women = products.slice(0,4);
+    console.log("Popular in women fetched");
+    res.send(popular_in_women);
     
 })
+
+// Creating endpoints for adding products in cartdata
 
 app.listen(port,(error)=>{
     if (!error){
