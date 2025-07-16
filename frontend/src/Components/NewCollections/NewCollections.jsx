@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import './NewCollections.css'
-import new_collection from '../Assets/new_collections'
-import Item from '../Item/Item'
-import { data } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import "./NewCollections.css";
+
+import Item from "../Item/Item";
+
 
 const NewCollections = () => {
+  const [new_collection, setNew_collection] = useState([]);
 
-  const [new_collection,setNew_collection] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:4000/newcollections")
+      .then((response) => response.json())
+      .then((data) => setNew_collection(data));
+  }, []);
 
-  useEffect(()=>{
-    fetch('http://localhost:4000/newcollections')
-    .then((response)=>response.json())
-    .then((data)=>setNew_collection(data));
-  },[])
+  console.log(new_collection);
 
   return (
-    <div className='new-collections'>
-    <h1>NEW COLLECTIONS</h1>
-    <hr />
+    <div className="new-collections">
+      <h1>NEW COLLECTIONS</h1>
+      <hr />
 
-    <div className="collections">
-    {new_collection.map((item,i)=>{
-        return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}/>
-    })}
+      <div className="collections">
+        {new_collection.map((item, i) => {
+          return (
+            <Item
+              key={i}
+              id={item.id}
+              name={item.name}
+              image={item.image}
+              new_price={item.new_price}
+              old_price={item.old_price}
+              currency={item.currency}
+            />
+          );
+        })}
+      </div>
     </div>
-      
-    </div>
-  )
-}
+  );
+};
 
-export default NewCollections
+export default NewCollections;

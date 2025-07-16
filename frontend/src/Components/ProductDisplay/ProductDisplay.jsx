@@ -5,14 +5,17 @@ import star_dull_icon from '../Assets/star_dull_icon.png'
 import { ShopContext } from '../../Context/ShopContext'
 
 const ProductDisplay = (props) => {
-    const {product} = props;
+    
     const {addToCart} = useContext(ShopContext);
+
+    const {product} = props;
+    
 
   return (
     <div className='productdisplay'>
     <div className="productdisplay-left">
         <div className="productdisplay-img-list">
-            <img src={product.image} alt="" />
+            <img src={product.image} alt="h" />
             <img src={product.image} alt="" />
             <img src={product.image} alt="" />
             <img src={product.image} alt="" />
@@ -32,8 +35,8 @@ const ProductDisplay = (props) => {
             <p>(122)</p>
         </div>
         <div className="productdisplay-right-prices">
-            <div className="productdisplay-right-price-old">${product.old_price}</div>
-            <div className="productdisplay-right-price-new">${product.new_price}</div>
+            <div className="productdisplay-right-price-old">{product.currency === "INR" ? "₹" : "$"}{product.old_price}</div>
+            <div className="productdisplay-right-price-new">{product.currency === "INR" ? "₹" : "$"}{product.new_price}</div>
         </div>
         <div className="productdisplay-right-description">
             Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas
@@ -49,7 +52,7 @@ const ProductDisplay = (props) => {
             </div>
         </div>
         <button onClick={()=>{
-            addToCart(product.id)
+            addToCart(props.id)
             }}>ADD TO CART</button>
         <p className='productdisplay-right-category'><span>Category :</span> Women, T-Shirt, Crop Top</p>
         <p className='productdisplay-right-category'><span>Tags :</span> Modern, Latest</p>
